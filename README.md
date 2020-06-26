@@ -8,7 +8,11 @@ configuration system values in database, configurable messages with traduction, 
 Quick start
 -----------
 
-1. Add "dbucom" to your INSTALLED_APPS setting like this::
+0. Install:
+
+pip install django-brain-utils
+
+1. Add "dbucom" to your INSTALLED_APPS setting like this:
 
     INSTALLED_APPS = [
         ...
