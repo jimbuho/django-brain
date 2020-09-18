@@ -10,9 +10,11 @@ Quick start
 
 0. Install:
 
-    pip install django-brain-utils
+    git clone https://github.com/jimbuho/django-brain.git
+    
+    pip install -e django-brain-utils/
 
-1. Add "dbucom" to your INSTALLED_APPS setting like this:
+1. Add "brainutils" to your INSTALLED_APPS setting like this:
 
     INSTALLED_APPS = [
         ...
