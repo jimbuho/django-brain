@@ -8,7 +8,13 @@ configuration system values in database, configurable messages with traduction, 
 Quick start
 -----------
 
-1. Add "dbucom" to your INSTALLED_APPS setting like this::
+0. Install:
+
+    git clone https://github.com/jimbuho/django-brain.git
+    
+    pip install -e django-brain-utils/
+
+1. Add "brainutils" to your INSTALLED_APPS setting like this:
 
     INSTALLED_APPS = [
         ...
