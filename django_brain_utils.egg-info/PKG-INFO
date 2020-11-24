@@ -1,4 +1,4 @@
-Metadata-Version: 1.1
+Metadata-Version: 2.1
 Name: django-brain-utils
 Version: 0.1.2
 Summary: My app description
@@ -16,7 +16,13 @@ Description: =====
         Quick start
         -----------
         
-        1. Add "dbucom" to your INSTALLED_APPS setting like this::
+        0. Install:
+        
+            git clone https://github.com/jimbuho/django-brain.git
+            
+            pip install -e django-brain-utils/
+        
+        1. Add "brainutils" to your INSTALLED_APPS setting like this:
         
             INSTALLED_APPS = [
                 ...
@@ -29,7 +35,7 @@ Description: =====
             {% load butils %}
             <h1>{% display_message request 'home.welcome' %}</h1>
         
-        3. Run ``python manage.py migrate`` to create the polls models.
+        3. Run ``python manage.py migrate`` to create the brainutils models.
         
         4. Start the development server, visit http://127.0.0.1:8000 to watch first message and then go http://localhost:8000/admin/brainutils/message/
            to edit the created message, you may set there the message you want all times you need (to refressh changes you need
@@ -39,7 +45,7 @@ Description: =====
         More utilities
         -----------
         
-        1. Configuration variables
+        ###Configuration variables
         
         You can set and use in your code a configuration variable very easy like this:
         
@@ -51,7 +57,7 @@ Description: =====
         Then you may set a new value whenever you whant in http://localhost:8000/admin/brainutils/configuration/. Again you need
         to restart your webserver to refresh changes
         
-        2. Model standart base fields:
+        ###Model standart base fields:
         
         from brainutils import mixins
         
@@ -63,7 +69,7 @@ Description: =====
         Then you have this fields and you may use like you want:
         creation_date, modification_date, creation_user, modification_user, status
         
-        3. Extra Models Administrator functionalities
+        ###Extra Models Administrator Skills
         
         If you need to interact with your model administrator with extra tags or actions you can use something like this:
         
@@ -90,7 +96,7 @@ Description: =====
                     {'name':'actionname', 'activation':True, 'color':self.ENABLED_COLOR, 'myaction_view':self.myaction_view},
                 ]
         
-        4. Language Manager
+        ###Language Manager
         
         Youre application may needs to be multilanguage, theres an easy way with Brain Utils, just set in your code:
         
@@ -110,7 +116,7 @@ Description: =====
         
         Then you may set a new language value whenever you whant in http://localhost:8000/admin/brainutils/language/.
         
-        5. Customers Accounts
+        ###Customers Accounts
         
         Brainutils gives you an standard login, signup and more functionalities for customers in your application.
         
@@ -127,7 +133,7 @@ Keywords: login,signup,messages,configuration,rehuse
 Platform: UNKNOWN
 Classifier: Environment :: Web Environment
 Classifier: Framework :: Django
-Classifier: Framework :: Django :: X.Y  # Replace "X.Y" as appropriate
+Classifier: Framework :: Django :: 1.10
 Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: BSD License
 Classifier: Operating System :: OS Independent
@@ -139,3 +145,5 @@ Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
 Classifier: Topic :: Internet :: WWW/HTTP
 Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Requires-Python: >=3.5
+Description-Content-Type: text/markdown
