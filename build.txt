@@ -4,7 +4,11 @@ python3 setup.py sdist bdist_wheel
 
 Install in dev app:
 
-pip install /home/developer/projects/django/django-brain-utils/dist/django_brain_utils-0.1.2.tar.gz
+pip install /home/developer/projects/django/django-brain-utils/dist/django_brain_utils*.tar.gz
+
+Install in PIP Test:
+
+python3 -m twine upload --repository testpypi --skip-existing dist/*
 
 Install in PIP:
 
