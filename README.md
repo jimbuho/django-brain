@@ -12,7 +12,8 @@ Quick start
 
     INSTALLED_APPS = [
         ...
-        'brainutils',
+        'brainutils', # Before allauth
+        ...
     ]
 
 2. To start you can add a configurable message in your home page, example:
@@ -100,3 +101,16 @@ In templates:
 {% endfor %}
 
 Then you may set a new language value whenever you whant in http://localhost:8000/admin/brainutils/language/.
+
+5. Customers Accounts
+
+Brainutils gives you an standard login, signup and more functionalities for customers in your application.
+
+To customize messages and else, copy our templates/account/ folder and change there whatever you want. You may
+reuse a lot of funcionality inside there if your application web structure is similar. We use bootstrap as this:
+
+<div class="main-container">
+    <div class="inside-container">
+        <!-- HERE PAGE CONTENT -->
+    </div>
+</div>

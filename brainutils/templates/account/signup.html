@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load butils %}
+
+{% block title %}{% display_message request 'top.signup.title' %}{% endblock %}
+
+{% block extra_css %}
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/bootstrap-social.min.css" type="text/css">
+{% endblock %}
+
+{% block body %}
+{% if user.is_authenticated %}
+<div class="row text-center">
+    <div class="col-md-12">
+        <h1>{% display_message request 'app.account.registeredyed' %}</h1>
+    </div>
+    <div class="col-md-12 text-center">
+        <a href="javascript:window.history.back()" class="btn cancel_btn">
+            <i class="fas fa-arrow-left"></i>&nbsp;{% display_message request 'app.account.knowmore.back' %}
+        </a>
+    </div>
+    <div class="col-md-12 text-center">
+        <br>
+    </div>
+</div>
+{% else %}
+<script src="https://www.google.com/recaptcha/api.js?render=6Ld3gtEUAAAAAB-kdsB3sA_KHV80DwqxD8tqRKW7"></script>
+<div class="main-container">
+    <div class="inside-container">
+        {% block messages %}
+        {% if messages %}
+        <div>
+            <ul>
+                {% for message in messages %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>{{message}}</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% endblock %}
+        <div class="row">
+            <div class="col-md-3 text-center">&nbsp;</div>
+            <div class="col-md-6 text-center">
+                <div class="card">
+                    <h5 class="card-header info-color white-text text-center py-4">
+                        <strong>{% display_message request 'app.account.signup.title' %}</strong>
+                    </h5>
+                    <!--Card content-->
+                    <div class="card-body px-lg-5 pt-0">
+                        <p style="text-align:justify">{% display_message request 'account.signup.info' %}</p>
+
+                        <form id="signup_form"  action="{% url 'account_signup' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                            {% endif %}
+
+                            <div class="form-group">
+                                {{form.username}}
+                                <span class="error-msg">{{form.username.errors}}</span>
+                            </div>
+                            <div class="form-group">
+                                {{form.password1}}
+                                <span class="error-msg">{{form.password1.errors}}</span>
+                            </div>
+                            <div class="form-group">
+                                {{form.password1}}
+                                <span class="error-msg">{{form.password1.errors}}</span>
+                            </div>
+                            <div class="form-group">
+                                {{form.phone}}
+                                <span class="error-msg">{{form.phone.errors}}</span>
+                            </div>
+
+                            <input type="hidden" name="g-recaptcha-response" id="recaptchaResponse">
+
+
+                            <div class="form-group">
+                                {% display_message request 'account.signup.accepterms.info' %}&nbsp;
+                                <a href="{% url 'terms' %}" target="_blank">{% display_message request 'app.account.signup.accepterms.link.terms' %}</a>
+                                <div class="custom-control custom-checkbox">
+                                    {{form.accept_term}}
+                                    <label class="custom-control-label" for="id_accept_term">{% display_message request 'app.account.accepterms.form.field' %}</label>
+                                </div>
+                                <span class="error-msg">{{form.accept_term.errors}}</span>
+                            </div>
+
+                            <button type="submit" form="signup_form" class="btn action_btn">
+                                {% display_message request 'app.account.signup.do' %}
+                            </button>
+
+                            <div class="form-group">
+                                <a href="/accounts/login/">
+                                    {% display_message request 'app.account.login.yet' %}
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body px-lg-5 pt-0">
+                        {% load account socialaccount %}
+                        {% get_providers as socialaccount_providers %}
+                        {% for provider in socialaccount_providers %}
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <a class="btn btn-block btn-social btn-{{provider.name|lower}}"
+                                   href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+                                    <span class="fa fa-{{provider.name|lower}}"></span> {% display_message request 'app.account.signup.with' %}&nbsp; {{provider.name}}
+                                </a>
+                                <br>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-2 text-center">&nbsp;</div>
+            </div>
+            <div class="col-md-12 text-center">&nbsp;&nbsp; </div>
+        </div>
+    </div>
+</div>
+<script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute("{% display_configuration 'app.account.recaptcha.key' '6Ld3gtEUAAAAAB-kdsB3sA_KHV80DwqxD8tqRKW7' %}", {action: 'signup'}).then(function(token) {
+            var input = document.getElementById('recaptchaResponse');
+            input.value = token;
+        });
+    });
+</script>
+{% endif %}
+{% endblock %}

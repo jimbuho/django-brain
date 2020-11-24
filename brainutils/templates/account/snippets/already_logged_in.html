@@ -1,0 +1,33 @@
+{% load i18n %}
+{% load main %}
+{% load account %}
+
+{% user_display user as user_display %}
+<div class="main-container">
+    <div class="inside-container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="our-header-prom prom-padd">
+                    <h1 class="title1">{% display_message request 'account.alreadylogin.titulo' %}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 text-center">&nbsp;</div>
+            <div class="col-md-6 text-center">
+                <p style="text-align:justify">{% display_message request 'account.alreadylogin.info' %}</p>
+                <h4> {{ user_display }}</h4>
+            </div>
+            <div class="col-md-3 text-center">&nbsp;</div>
+            <div class="col-md-3 text-center">&nbsp;</div>
+            <div class="col-md-6 text-center">
+                <a href="{% url 'home' %}" class="btn third_btn">{% display_message request 'account.alreadylogin.home' %}</a>
+            </div>
+            <div class="col-md-3 text-center">&nbsp;</div>
+        </div>
+        <div class="row"><div class="col-md-12"><br></div></div>
+    </div>
+</div>
+
+
+

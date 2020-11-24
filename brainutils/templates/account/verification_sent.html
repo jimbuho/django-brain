@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load butils %}
+{% load account %}
+
+{% block title %}{% display_message request 'top.verifyemail.sent.title' %}{% endblock %}
+
+{% block body %}
+<div class="main-container">
+    <div class="inside-container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="card">
+                    <h5 class="card-header info-color white-text text-center py-4">
+                        <strong>{% display_message request 'app.account.verifyemail.sent.title' %}</strong>
+                    </h5>
+                    <!--Card content-->
+                    <div class="card-body px-lg-5 pt-0">
+                        <p style="text-align:justify">{% display_message request 'app.account.verifyemail.sent.info' %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row"><div class="col-md-12 text-center"></div></div>
+    </div>
+</div>
+{% endblock %}

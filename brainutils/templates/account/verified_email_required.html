@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load butils %}
+{% load account %}
+
+{% block title %}{% display_message request 'top.verifyemail.required.title' %}{% endblock %}
+
+{% block body %}
+<div class="main-container">
+    <div class="inside-container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="card">
+                    <h5 class="card-header info-color white-text text-center py-4">
+                        <strong>{% display_message request 'app.account.verifyemail.required.title' %}</strong>
+                    </h5>
+                    <!--Card content-->
+                    <div class="card-body px-lg-5 pt-0">
+                        {% url 'account_email' as email_url %}
+                        <p style="text-align:justify">{% display_message request 'app.account.verifyemail.required.info' %}</p>
+                        <p style="text-align:justify">{% display_message request 'app.account.verifyemail.required.youcanchangeemail' %} <a href="{{ email_url }}"></a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

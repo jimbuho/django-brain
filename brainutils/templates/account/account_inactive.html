@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load butils %}
+
+{% block title %}{% display_message request 'top.inactiveaccount.title' %}{% endblock %}
+
+{% block body %}
+<div class="main-container">
+    <div class="inside-container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="card">
+                    <h5 class="card-header info-color white-text text-center py-4">
+                        <strong>{% display_message request 'app.account.inactiveaccount.title' %}</strong>
+                    </h5>
+                    <div class="card-body px-lg-5 pt-0">
+                        <p style="text-align:justify">{% display_message request 'app.account.inactiveaccount.info' %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

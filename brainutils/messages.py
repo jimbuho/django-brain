@@ -86,6 +86,9 @@ class LanguageManager:
             return memory.cache.recover(memory.Memory.MAIN, 'dbu.languages.current', request,
                                         default_value=self.get_default())
 
+        return self.get_default()
+
+
     def get_language_object(self, request):
         """
         Get Default

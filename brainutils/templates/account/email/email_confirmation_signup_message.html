@@ -1,0 +1,15 @@
+{% load account %}
+{% user_display user as user_display %}
+{% load i18n %}
+{% autoescape off %}
+
+<img src="https://pingecko.com/static/images/logo-liberi.png" width="150" height="auto">
+<br>
+<b>Bienvenido a Pingecko</b>
+<br><br>
+Has recibido este correo ya que te has registrado con este usuario {{ user_display }} en nuestra plataforma.
+<br><br>
+Para confirmar que este es tu correo electronico haz click en {{ activate_url }}
+<br><br>
+{% endautoescape %}
+Gracias por usar <b>Pingecko</b>!

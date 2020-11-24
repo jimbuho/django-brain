@@ -1,0 +1,1 @@
+Se ha enviado un mensaje de confirmación a tu correo: {{email}}.

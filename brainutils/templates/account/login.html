@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load butils %}
+{% load socialaccount %}
+
+{% block title %}{% display_message request 'top.login.title' %}{% endblock %}
+
+{% block extra_css %}
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/bootstrap-social.min.css" type="text/css">
+{% endblock %}
+
+{% block body %}
+{% if user.is_authenticated %}
+<div class="row text-center">
+    <div class="col-md-12">
+        <br>
+        <div class="our-header-prom prom-padd">
+            <h1 class=title1>{% display_message request 'account.loggedinyet.thisapp' %}</h1>
+        </div>
+    </div>
+    <div class="col-md-12 text-center">
+        <a href="javascript:window.history.back()" class="btn cancel_btn">
+            <i class="fas fa-arrow-left"></i>&nbsp;{% display_message request 'knowmore.back' %}
+        </a>
+    </div>
+    <div class="col-md-12 text-center">
+        <br>
+    </div>
+</div>
+{% else %}
+<div class="main-container">
+    <div class="inside-container">
+        <div class="row">
+            <div class="col-md-3 text-center">&nbsp;</div>
+            <div class="col-md-6 text-center">
+                <div class="card">
+                    <h5 class="card-header info-color white-text text-center py-4">
+                        <strong>{% display_message request 'account.login.title' %}</strong>
+                    </h5>
+                    <!--Card content-->
+                    <div class="card-body px-lg-5 pt-0">
+                        <p style="text-align:justify">{% display_message request 'account.login.info' %}</p>
+
+                        <form id="login_form" action="{% url 'account_login' %}" method="post">
+                            {% csrf_token %}
+                            {{form.next}}
+
+                            {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                            {% endif %}
+
+                            <div class="form-group">
+                                <label for="login">{% display_message request 'account.login.email' %}</label>
+                                <input type="text" name="login" autofocus="autofocus" maxlength="150"
+                                                   placeholder="Email" id="id_login" required class="input-field">
+                                <span class="error-msg">{{form.login.errors}}</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">{% display_message request 'account.login.password' %}</label>
+                                <input type="password" name="password" autofocus="autofocus" maxlength="150"
+                                                   placeholder="Clave" id="id_password" required class="input-field">
+                                <span class="error-msg">{{form.password.errors}}</span>
+                            </div>
+
+                            <button type="submit" form="login_form" class="btn action_btn">
+                                <i class="fa fa-user"></i>&nbsp;{% display_message request 'customer.login.do' %}
+                            </button>
+
+                            <div class="form-group">
+                                <a href="{% url 'account_signup' %}{% if redirect_field_value %}?next={{redirect_field_value}}{% endif %}">{% display_message request 'customer.login.signup.do' %}</a>
+                                <small>{% display_message request 'customer.login.signup.ifnotyet' %}</small>
+                            </div>
+
+                            <div class="form-group">
+                              <a href="{% url 'account_reset_password' %}">{% display_message request 'customer.login.forgotpassword' %}</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body px-lg-5 pt-0">
+                        {% load account socialaccount %}
+                        {% get_providers as socialaccount_providers %}
+                        {% for provider in socialaccount_providers %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a class="btn btn-block btn-social btn-{{provider.name|lower}}"
+                                   href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+                                    <span class="fa fa-{{provider.name|lower}}"></span> {% display_message request 'customer.login.with' %}&nbsp;{{provider.name}}
+                                </a>
+                                <br>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 text-center"></div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra %}
+<script>function loadExtra() {}</script>
+{% endblock %}

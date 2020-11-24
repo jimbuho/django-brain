@@ -21,3 +21,18 @@ Description
 
 ACTIVE = '1'
 INACTIVE = '2'
+
+# Formato de Fecha Principal
+DATE_INPUT_FORMAT = '%m/%d/%Y'
+
+"""
+
+Date Input Format
+
+Description
+    El formato a ser usado por todos los campos de tipo
+    fecha en los formularios del sistema.
+
+"""
+
+DATE_INPUT_FORMATS = ['%m/%d/%Y',]

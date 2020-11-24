@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load butils %}
+
+{% block body %}
+<div class="main-container">
+    <div class="inside-container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="our-header-prom prom-padd">
+                    <h1 class=text-center><strong>{% display_message request 'app.terms.title' %}</strong> </h1>
+                    <div class="text-center">
+                        <hr>
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-10 text-justify">
+                 <p style="text-align:justify">
+                    {% display_message request 'app.terms.content' %}
+                 </p>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

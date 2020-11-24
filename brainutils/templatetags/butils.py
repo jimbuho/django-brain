@@ -10,7 +10,7 @@
 from django import template
 from django.utils.safestring import mark_safe
 
-from brainutils import messages
+from brainutils import messages, configuration
 
 register = template.Library()
 
@@ -31,3 +31,20 @@ def display_message(request, name):
     """
     language = messages.languages.get_language(request)
     return mark_safe( messages.get_message(name, language) )
+
+@register.simple_tag
+def display_configuration(name, default=None):
+    """
+
+    Display
+
+    Description
+        Tag para mostrar una configuracion previamente almacenada en BDD
+        y memoria, en pantalla formateado en HTML
+
+    :param name: Nombre de la configuracion
+    :param default: Valor por defecto
+    :return: String -- Mensaje HTML
+
+    """
+    return mark_safe( configuration.get_value(name, default) )

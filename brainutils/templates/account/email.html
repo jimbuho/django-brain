@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load butils %}
+{% load account %}
+
+{% block title %}{% display_message request 'top.emails.title' %}{% endblock %}
+
+{% block body %}
+<div class="main-container">
+    <div class="inside-container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="our-header-prom prom-padd">
+                    <h1 class="title1">{% display_message request 'app.account.emails.title' %}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/accounts/social/connections/" role="tab" aria-selected="false">{% display_message request 'app.account.conections.social' %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="javascript:void(0)" role="tab" aria-controls="pills-config" aria-selected="true">{% display_message request 'app.account.conections.emails' %}</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="main" role="tabpanel" aria-labelledby="main-tab">
+                        <div class="row">
+                            <div class="col-md-3 text-center">&nbsp;</div>
+                            <div class="col-md-6 text-center">
+
+                                {% if user.emailaddress_set.all %}
+
+                                <p class="email_settings_info">{% trans 'The following e-mail addresses are associated with your account:' %}</p>
+
+                                <form action="{% url 'account_email' %}" class="container-fluid text-center" method="post">
+                                {% csrf_token %}
+
+                                  {% for emailaddress in user.emailaddress_set.all %}
+                                    <div class="card">
+                                        <div class="card-header" role="tab" id="headingProductOne">
+                                          <h3>{{ emailaddress.email }}</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            {% if emailaddress.verified %}
+                                              <span class="verified">&nbsp;<i class="fa fa-check" aria-hidden="true"> ({% display_message request 'app.account.emails.verify' %}) &nbsp;</i></span>
+                                            {% else %}
+                                              <span class="unverified">&nbsp;<i class="fa fa-circle-o-notch" aria-hidden="true"> ({% display_message request 'app.account.emails.notverify' %}) &nbsp;</i></span>
+                                            {% endif %}
+
+                                            <input id="email_radio_{{forloop.counter}}" type="radio" name="email" {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked"{%endif %} value="{{emailaddress.email}}"/>
+
+                                            {% if emailaddress.primary %}
+                                              <span class="primary">&nbsp;{% display_message request 'app.account.emails.main' %}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                  {% endfor %}
+                                    <div class="container-fluid" >
+                                      <button class="btn btn-outline-primary btn-sm" type="submit" name="action_primary" >{% trans 'Make Primary' %}</button>
+                                      <button class="btn btn-outline-info btn-sm" type="submit" name="action_send" >{% trans 'Re-send Verification' %}</button>
+                                      <button class="btn cancel_btn btn-sm" type="submit" name="action_remove" >{% trans 'Remove' %}</button>
+                                    </div>
+                                </form>
+
+                                {% else %}
+                                <p class="email_settings_info"><strong>{% trans 'Warning:'%}</strong> {% trans "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc." %}</p>
+                                {% endif %}
+                                <br>
+
+                                <div class="card">
+                                    <div class="card-header" role="tab" id="headingProductOne">
+                                      <h2>{% trans "Add E-mail Address" %}</h2>
+                                    </div>
+                                    <div class="card-body">
+                                        <form method="post" class="container-fluid text-center" id="email_form" action="{% url 'account_email' %}">
+                                          {% csrf_token %}
+
+                                           <div class="input-container">
+                                                <i class="fas fa-envelope icon"></i>
+                                                <input type="email" name="email" id="id_email" required placeholder="{% display_message request 'account.emails.form.email' %}"
+                                                   size="30" class="input-field">
+                                            </div>
+                                            <button class="btn action_btn" name="action_add" type="submit">{% trans "Add E-mail" %}</button>
+                                      </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<div class="row">
+            <div class="col-md-12 text-center">&nbsp;<br></div>
+		</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+(function() {
+  var message = "{% trans 'Do you really want to remove the selected e-mail address?' %}";
+  var actions = document.getElementsByName('action_remove');
+  if (actions.length) {
+    actions[0].addEventListener("click", function(e) {
+      if (! confirm(message)) {
+        e.preventDefault();
+      }
+    });
+  }
+})();
+</script>
+{% endblock %}

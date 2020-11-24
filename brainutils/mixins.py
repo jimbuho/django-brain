@@ -11,6 +11,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+from django.db import transaction, IntegrityError
+
 from . import properties
 
 import traceback
@@ -199,6 +201,57 @@ class AuditMixin(models.Model):
         except:
             return str(self.modification_date)
 
+    class Meta:
+        abstract = True
+
+class AuditMixinCode(AuditMixin):
+    """
+
+    Audit Mixin Code
+    ===================
+
+    Description
+        Esta clase permite manejar un modelos con campos estandares mas un codigo alfanumerico
+
+    """
+
+    code = models.CharField(max_length=12, null=True, blank=True, unique=True)
+
+    def save(self, *args, **kwargs):
+        """
+
+        Save Entity
+
+        Description
+            Guarda con codigo especial unico de entidad,
+            garantizamos que sea unico
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+
+        if not self.code:
+
+            max_tries = 50
+            while True:
+                if max_tries > 0:
+                    try:
+                        self.code = self.generate_unique_id_12()
+                        savepoint = transaction.savepoint()
+                        super(AuditMixinCode, self).save(*args, **kwargs)
+                        transaction.savepoint_commit(savepoint)
+                        break
+                    except IntegrityError as e:
+                        print('<- [AuditMixinCode.save] Error al guardar: %s' % str(e))
+                        transaction.savepoint_rollback(savepoint)
+                    max_tries -= 1
+                else:
+                    print('<- [AuditMixinCode.save] No se pudo generar ID UNICO')
+                    break
+        else:
+            super(AuditMixinCode, self).save(*args, **kwargs)
+
     @staticmethod
     def get_unique_code():
         """
@@ -210,7 +263,7 @@ class AuditMixin(models.Model):
 
         :return:
         """
-        uid = uuid.uuid4().int & (1<<64)-1
+        uid = uuid.uuid4().int & (1 << 64) - 1
         return str(uid)[:12]
 
     def generate_unique_id_12(self):
@@ -223,7 +276,7 @@ class AuditMixin(models.Model):
 
         :return:
         """
-        return AuditMixin.get_unique_code()
+        return AuditMixinCode.get_unique_code()
 
     class Meta:
         abstract = True

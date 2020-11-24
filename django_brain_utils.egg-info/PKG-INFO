@@ -1,11 +1,11 @@
 Metadata-Version: 1.1
 Name: django-brain-utils
-Version: 0.1
-Summary: A Django common utilities for rapid development
-Home-page: https://www.example.com/
-Author: Diego Alejandro Gonzalez
+Version: 0.1.2
+Summary: My app description
+Home-page: https://github.com/jimbuho/django-brain/
+Author: Diego Gonzalez (jimbuho)
 Author-email: dgonzalez.jim@gmail.com
-License: Simplified BSD
+License: BSD
 Description: =====
         Brain Utils
         =====
@@ -20,7 +20,8 @@ Description: =====
         
             INSTALLED_APPS = [
                 ...
-                'brainutils',
+                'brainutils', # Before allauth
+                ...
             ]
         
         2. To start you can add a configurable message in your home page, example:
@@ -30,7 +31,7 @@ Description: =====
         
         3. Run ``python manage.py migrate`` to create the polls models.
         
-        4. Start the development server, visit http://127.0.0.1:8000 to watch first message and then go http://127.0.0.1:8000/admin/
+        4. Start the development server, visit http://127.0.0.1:8000 to watch first message and then go http://localhost:8000/admin/brainutils/message/
            to edit the created message, you may set there the message you want all times you need (to refressh changes you need
            to restart your webserver Apache, Nginx, etc). Is easy and you got a total control for each message and it traduction
         
@@ -47,7 +48,7 @@ Description: =====
         token = configuration.get_value('api.some.token','HEREYOURINITIALTOKENVALUE')
         max_items_per_page = configuration.get_integer('commons.pagination.maxitems','10')
         
-        Then you may set a new value whenever you whant in http://127.0.0.1:8000/admin/brainutils_configuration. Again you need
+        Then you may set a new value whenever you whant in http://localhost:8000/admin/brainutils/configuration/. Again you need
         to restart your webserver to refresh changes
         
         2. Model standart base fields:
@@ -107,8 +108,22 @@ Description: =====
             {{l.title}}
         {% endfor %}
         
-        Then you may set a new language value whenever you whant in http://127.0.0.1:8000/admin/brainutils_language.
+        Then you may set a new language value whenever you whant in http://localhost:8000/admin/brainutils/language/.
         
+        5. Customers Accounts
+        
+        Brainutils gives you an standard login, signup and more functionalities for customers in your application.
+        
+        To customize messages and else, copy our templates/account/ folder and change there whatever you want. You may
+        reuse a lot of funcionality inside there if your application web structure is similar. We use bootstrap as this:
+        
+        <div class="main-container">
+            <div class="inside-container">
+                <!-- HERE PAGE CONTENT -->
+            </div>
+        </div>
+        
+Keywords: login,signup,messages,configuration,rehuse
 Platform: UNKNOWN
 Classifier: Environment :: Web Environment
 Classifier: Framework :: Django

@@ -1,0 +1,11 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% display_message request 'top.signupclosed.title' %}{% endblock %}
+
+{% block content %}
+<h1>{% display_message request 'app.account.signupclosed.title' %}</h1>
+
+<p>{% display_message request 'app.account.signupclosed.sorrysingupclosed' %}</p>
+{% endblock %}

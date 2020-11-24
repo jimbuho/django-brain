@@ -1,0 +1,7 @@
+Build:
+
+python setup.py sdist
+
+Install in final app:
+
+pip install /home/developer/projects/django/django-brain-utils/dist/django_brain_utils-0.1.2.tar.gz
