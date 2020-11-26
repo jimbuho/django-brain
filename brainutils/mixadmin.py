@@ -157,6 +157,34 @@ class AdminMixinBase:
     extra_actions.allow_tags = True
     extra_actions.short_description = 'Actions'
 
+    def change_boolean_value_view(self, request, id, field_name):
+        """
+
+        Cambia el valor booleano de un campo
+
+        :param request:
+        :param id:
+        :param field_name:
+        :return:
+        """
+        try:
+
+            obj = self.get_object(request, id)
+
+            field = getattr(obj, field_name)
+
+            if field is None:
+                setattr(obj, field_name, True)
+            else:
+                setattr(obj, field_name, not field)
+
+            obj.username = request.user.username
+            obj.save()
+            msg = '{} {}'.format(__.get_message('admin.action.%s.success' % field_name), obj.id)
+            return self.response_view(request, True, '%s_view' % field_name, msg)
+        except Exception as e:
+            return self.response_view(request, False, '%s_view' % field_name, 'Error: {}'.format(str(e)))
+
     def enable_view(self, request, id):
         """
 
@@ -167,9 +195,12 @@ class AdminMixinBase:
 
         :return:
         """
-        response, method = self.enable(id)
-
-        return self.response_view(request, response, method)
+        try:
+            obj = self.get_object(request, id)
+            obj.enable(request.user.username)
+            return self.response_view(request, True, 'enable_view', 'Enable Success %d' % obj.id)
+        except Exception as e:
+            return self.response_view(request, False, 'enable_view', 'Error: {}'.format(str(e)))
 
     def disable_view(self, request, id):
         """
@@ -181,10 +212,12 @@ class AdminMixinBase:
 
         :return:
         """
-
-        response, method = self.disable(id)
-
-        return self.response_view(request, response, method)
+        try:
+            obj = self.get_object(request, id)
+            obj.disable(request.user.username)
+            return self.response_view(request, True, 'disable_view', 'Disable Success %d' % obj.id)
+        except Exception as e:
+            return self.response_view(request, False, 'disable_view', 'Error: {}'.format(str(e)))
 
     def response_view(self, request, response, method, extra_msg=''):
         """
@@ -206,7 +239,6 @@ class AdminMixinBase:
             self.show_error_message(request, method, extra_msg)
 
         return HttpResponseRedirect(self.get_url())
-
 
     def show_success_message(self, request, method, extra_msg=''):
         """

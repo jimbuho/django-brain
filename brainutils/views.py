@@ -1,13 +1,33 @@
-from django.views.generic.base import TemplateView
 
-class TermsView(TemplateView):
+from django.http import HttpResponseRedirect
+from django.views.generic.base import View
+
+from brainutils import messages
+
+class LanguageChangeView(View):
     """
 
-    Terms View
+    Language Change View
     ===================
 
     Description
-        Vista usada para mostrar los terminos y condiciones
+        Vista usada para cambiar el lenguaje del sistema
 
     """
-    template_name = "brainutils/terms.html"
+
+    def get(self, request, *args, **kwargs):
+        """
+
+        Get
+
+        Description
+            Procesa el GET de esta vista
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        if 'name' in request.GET:
+            messages.languages.change_language(request, request.GET.get('name'))
+
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

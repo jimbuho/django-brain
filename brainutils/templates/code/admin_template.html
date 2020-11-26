@@ -1,0 +1,48 @@
+"""
+
+Module {{app.name}} Admins Documentation
+
+"""
+{% load bgen %}from django.contrib import admin
+from rangefilter.filter import DateRangeFilter
+from brainutils import mixadmin
+from . import models
+
+{% for model in models %}
+{% with model.boolean_field_names as boolean_field_names %}
+@admin.register(models.{{ model.name }})
+class {{ model.name }}Admin(mixadmin.ModelAdminMixin):
+    """
+
+    {{model.name}} Admin Auto-Generated
+
+    """
+    list_display = (
+        {% indent_items model.filter_field_names 8 quote='simple' %}{% if boolean_field_names %}'extra_actions'{% endif %}
+    )
+    search_fields = (
+        {% indent_items model.char_field_names 8 quote='simple' %}
+    )
+    {% if model.foreign_field_names %}raw_id_fields = (
+        {% indent_items model.foreign_field_names 8 quote='simple' %}
+    ){% endif %}
+    list_filter = [('creation_date', DateRangeFilter), ('modification_date', DateRangeFilter)]
+    {% if boolean_field_names %}{% for boolean_field in boolean_field_names %}
+    def {{boolean_field}}_view(self, request, id):
+        """
+        {{boolean_field}} Activation View
+        :param request:
+        :param id:
+        :return:
+        """
+        return self.change_boolean_value_view(request, id, '{{boolean_field}}')
+        {% endfor %}
+    def get_specific_dual_methods(self, obj):
+        """
+        Action methods
+        """
+        return [
+            {% for boolean_field in boolean_field_names %}{'name':'{{boolean_field}}', 'activation':True, 'color':self.ENABLED_COLOR, 'function_view':self.{{boolean_field}}_view},{% endfor %}
+        ]{% endif %}
+{% endwith %}
+{% endfor %}

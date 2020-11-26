@@ -1,5 +1,6 @@
 LICENSE
 MANIFEST.in
+README.md
 README.rst
 setup.cfg
 setup.py
@@ -8,6 +9,8 @@ brainutils/admin.py
 brainutils/ajax.py
 brainutils/configuration.py
 brainutils/context.py
+brainutils/gen_engine.py
+brainutils/gen_models.py
 brainutils/impexp.py
 brainutils/memory.py
 brainutils/messages.py
@@ -21,6 +24,9 @@ brainutils/urls.py
 brainutils/validators.py
 brainutils/views.py
 brainutils/vmixins.py
+brainutils/management/__init__.py
+brainutils/management/commands/__init__.py
+brainutils/management/commands/codegen.py
 brainutils/migrations/0001_initial.py
 brainutils/migrations/__init__.py
 brainutils/templates/account/Profile.html
@@ -57,7 +63,9 @@ brainutils/templates/account/messages/primary_email_set.txt
 brainutils/templates/account/messages/unverified_primary_email.txt
 brainutils/templates/account/snippets/already_logged_in.html
 brainutils/templates/brainutils/terms.html
+brainutils/templates/code/admin_template.html
 brainutils/templatetags/__init__.py
+brainutils/templatetags/bgen.py
 brainutils/templatetags/butils.py
 django_brain_utils.egg-info/PKG-INFO
 django_brain_utils.egg-info/SOURCES.txt

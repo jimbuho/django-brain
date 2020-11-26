@@ -114,3 +114,26 @@ reuse a lot of funcionality inside there if your application web structure is si
         <!-- HERE PAGE CONTENT -->
     </div>
 </div>
+
+###Code Generation
+
+With Django Brain Utils you can generate repetitive code, as the Model Admins, for that objetive we have a console,
+you can run the console from this command:
+
+./manage.py codegen
+
+And this menu will be displayed:
+
+Welcome to Brain Utils
+_________________________
+
+BRAIN UTILS GENERATOR
+What we gonna do?:
+1. Generate Admins
+2. Generate URLs- Views
+3. Generate Signup - Login
+0. Exit
+***************************
+Select and option[and press ENTER]:
+
+By the moment with just try with option 1, is very intuitive and easy to generate admins code.

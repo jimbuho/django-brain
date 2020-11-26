@@ -12,4 +12,4 @@ python3 -m twine upload --repository testpypi --skip-existing dist/*
 
 Install in PIP:
 
-python3 -m twine upload --repository testpypi dist/*
+python3 -m twine upload --repository dist/*
