@@ -167,7 +167,7 @@ class CommonForm:
         """
         self.fields[name].widget.attrs = {
             'step':'1',
-            'class':'money-input input-field',
+            'class':'money-input form-control',
             'data-placement':'left',
             'placeholder': messages.get_full_message(self.request, 'forms.field.placeholder.%s' % name)
         }

@@ -74,7 +74,10 @@ class Template:
                 except:
                     pass
 
-                file_name = '%s_%s.html' % (self.template_name, str(model.name).lower())
+                if self.template_name == 'delete':
+                    file_name = '%s_delete_confirm.html' % str(model.name).lower()
+                else:
+                    file_name = '%s_%s.html' % (self.template_name, str(model.name).lower())
 
                 to_path = os.path.join(path, file_name)
 
