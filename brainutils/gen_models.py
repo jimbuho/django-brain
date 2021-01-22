@@ -36,6 +36,7 @@ FILTER_FIELDS = (CharField, IntegerField, DateField, AutoField, BooleanField)
 NOT_FILTERABLE_FIELDS = ['creation_user','modification_user']
 AUDITABLE_FIELDS = ['status','creation_date', 'modification_date'] + NOT_FILTERABLE_FIELDS
 NO_INPUT_FIELDS = AUDITABLE_FIELDS + ['id','code']
+SIMPLE_AUDITABLE_FIELDS = ['modification_date','modification_user']
 
 LAST_FIELD = 'status'
 
@@ -82,6 +83,28 @@ def is_inputable_field(field):
     :return:
     """
     response = isinstance(field, FILTER_FIELDS) and field.name not in NO_INPUT_FIELDS
+    return response
+
+def is_audit_simple_field(field):
+    """
+
+    Auditable simple field
+
+    :param field:
+    :return:
+    """
+    response = field.name in SIMPLE_AUDITABLE_FIELDS
+    return response
+
+def is_string_field(field):
+    """
+
+    Check is string not auditable field
+
+    :param field:
+    :return:
+    """
+    response = isinstance(field, STRING_FIELDS) and field.name not in AUDITABLE_FIELDS
     return response
 
 def order_auditable_fields_at_end(field):
@@ -133,7 +156,7 @@ class Model:
     @property
     def string_field_names(self):
         """A list of concrete field names of type string (see :const:`STRING_FIELDS`)."""
-        return get_field_names(filter(lambda x: isinstance(x, STRING_FIELDS),
+        return get_field_names(filter(lambda x: is_string_field(x),
                                       self.model._meta.concrete_fields))
 
     @property
@@ -169,6 +192,11 @@ class Model:
     @property
     def input_fields(self):
         return get_field_names(filter(lambda x: is_inputable_field(x),
+                                      self.model._meta.concrete_fields))
+
+    @property
+    def audit_fields(self):
+        return get_field_names(filter(lambda x: is_audit_simple_field(x),
                                       self.model._meta.concrete_fields))
 
     @property

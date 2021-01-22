@@ -10,7 +10,7 @@
     <main class="container">
         <div class="row">
             <div class="col-md-12 text-right">
-                <a href="/{{app.name}}/create_{{ model.name|lower }}" class="btn btn-primary">(% display_message request 'add.new' %)</a>
+                <a href="/{{app.name}}/create-{{ model.name|lower }}/" class="btn btn-primary">(% display_message request 'add.new' %)</a>
             </div>
         </div>
         <div class="row">
@@ -25,6 +25,7 @@
     </div>
     <main role="main" class="col-md-9 ml-sm-auto px-4">
         <div class="row">
+            {% if mode == 'article' %}
             (% for p in page_obj %)
             <div class="col-lg-4  col-md-4 d-flex align-items-stretch" data-aos="fade-up">
                 <article class="entry">
@@ -44,6 +45,34 @@
                 </article>
             </div>
             (% endfor %)
+            {% elif mode == 'table' %}
+                <div class="table-responsive">
+                  <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          {% for field in model.input_fields %}
+                          <th scope="col">{{field}}</th>
+                          {% endfor %}{% for field in model.audit_fields %}
+                          <th scope="col">{{field}}</th>
+                          {% endfor %}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        (% for p in page_obj %)
+                        <tr>
+                          <th scope="row">((p.id))</th>
+                          {% for field in model.input_fields %}
+                          <th scope="col">((p.{{field}}))</th>
+                          {% endfor %}{% for field in model.audit_fields %}
+                          <th scope="col">((p.{{field}}))</th>
+                          {% endfor %}
+                        </tr>
+                        (% endfor %)
+                      </tbody>
+                  </table>
+                </div>
+            {% endif %}
         </div>
         <div class="row">
             <div class="blog-pagination" data-aos="fade-up">

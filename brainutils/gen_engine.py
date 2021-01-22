@@ -25,7 +25,7 @@ class Template:
 
     """
 
-    def __init__(self, app_name, template_name, ext='py'):
+    def __init__(self, app_name, template_name, ext='py', mode=None):
         """
 
         Construye la app
@@ -37,6 +37,8 @@ class Template:
         self.template_name = template_name
 
         self.ext = ext
+
+        self.mode = mode
 
         installed_apps = dict(get_apps())
 
@@ -60,7 +62,7 @@ class Template:
 
             with open(to_path, 'w') as f:
                 f.write(rendered)
-        else:
+        else: # html
             models = gen_models.Models(self.app)
 
             for model in models:
@@ -77,7 +79,7 @@ class Template:
                 to_path = os.path.join(path, file_name)
 
                 rendered = render_to_string('code/%s_html_template.html' % self.template_name,
-                                            {'model': model, 'app': self.app})
+                                            {'model': model, 'app': self.app, 'mode': self.mode})
 
                 with open(to_path, 'w') as f:
                     f.write(rendered)
@@ -166,11 +168,15 @@ class CRUDHTMLGenerator:
 
         :return:
         """
+        list_mode = str(input('Choice a list template mode: [A] Table, [B] Article:'))
+        list_mode = list_mode.upper() if list_mode else None
+        list_mode = 'article' if list_mode and list_mode == 'B' else 'table'
+
         Template(self.app_name, 'create', 'html').render()
         print('<== Success Generated CREATE HTML for', self.app_name)
         Template(self.app_name, 'update', 'html').render()
         print('<== Success Generated UPDATE HTML for', self.app_name)
-        Template(self.app_name, 'list', 'html').render()
+        Template(self.app_name, 'list', 'html', list_mode).render()
         print('<== Success Generated LIST HTML for', self.app_name)
         Template(self.app_name, 'delete', 'html').render()
         print('<== Success Generated DELETE HTML for', self.app_name)
