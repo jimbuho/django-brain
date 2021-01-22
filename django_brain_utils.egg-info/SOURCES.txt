@@ -64,6 +64,13 @@ brainutils/templates/account/messages/unverified_primary_email.txt
 brainutils/templates/account/snippets/already_logged_in.html
 brainutils/templates/brainutils/terms.html
 brainutils/templates/code/admin_template.html
+brainutils/templates/code/create_html_template.html
+brainutils/templates/code/delete_html_template.html
+brainutils/templates/code/forms_template.html
+brainutils/templates/code/list_html_template.html
+brainutils/templates/code/update_html_template.html
+brainutils/templates/code/urls_template.html
+brainutils/templates/code/views_template.html
 brainutils/templatetags/__init__.py
 brainutils/templatetags/bgen.py
 brainutils/templatetags/butils.py

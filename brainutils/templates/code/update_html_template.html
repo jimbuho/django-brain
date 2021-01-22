@@ -1,0 +1,34 @@
+<!-- IMPORTANT: Replace () with {} in django templates code -->
+(% extends 'base.html' %)
+(% load i18n %)
+(% load butils %)
+
+(% block title %)Update {{ model.name|lower }}(% endblock %)
+
+(% block body %)
+<section id="{{ model.name|lower }}" class="{{ model.name|lower }}">
+    <div class="container">
+        <div class="col-md-2">&nbsp;</div>
+        <div class="col-md-8">
+            <form id="this_form"  action="." method="post" enctype="multipart/form-data">
+                (% csrf_token %)
+                {% for field in model.input_fields %}
+                <div class="form-row">
+                    <div class="col-md-12 form-group">
+                        <label>(% display_message request 'form.{{field}}' %):</label>&nbsp;((form.{{field}}))
+                        <div class="validate"></div>
+                    </div>
+                </div>{% endfor %}
+                <!-- TODO Print extras fields-->
+                <input type="hidden" name="g-recaptcha-response" id="recaptchaResponse">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" form="this_form">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+(% endblock %)

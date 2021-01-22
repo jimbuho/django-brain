@@ -1,0 +1,24 @@
+<!-- IMPORTANT: Replace () with {} in django templates code -->
+(% extends 'base.html' %)
+(% load i18n %)
+(% load butils %)
+
+(% block title %)Delete {{ model.name|lower }}(% endblock %)
+
+(% block body %)
+<section id="{{ model.name|lower }}" class="{{ model.name|lower }}">
+    <div class="container">
+        <<div class="row">
+            <div class="col-md-12 text-center">
+                <form id="this_form"  action="." method="post" enctype="multipart/form-data">
+                    (% csrf_token %)
+                    <h5>(% display_message request '{{ model.name|lower }}.reallywantdelete' %)</h5>
+                    <a href="(% url '{{ model.name|lower }}_list' %)" class="btn btn-secondary">(% display_message request 'commons.cancel' %)</a>
+                    <button type="submit" form="this_form">(% display_message request 'commons.dodelete' %)</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+(% endblock %)
+

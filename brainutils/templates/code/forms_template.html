@@ -1,0 +1,52 @@
+"""
+
+Module {{app.name}} Forms Documentation
+
+"""
+{% load bgen %}from django import forms
+
+from brainutils import messages, mixforms
+
+from . import models
+
+{% for model in models %}
+class {{ model.name }}CreateUpdateForm(forms.ModelForm, mixforms.CommonForm):
+    """
+
+    Crea o actualiza un {{ model.name }} Form
+
+    :description Form para crear o actualziar un un paso de proceso de elaboracion
+
+    """
+
+    class Meta:
+        model = models.{{ model.name }}
+        exclude = ("status", "creation_user", "modificacion_user", "creation_date", "modification_date") #Add your not needed fields
+
+    def __init__(self, *args, **kwargs):
+        """
+        Init
+        :description Inicializacion de campos
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.request = kwargs.pop('request')
+        super({{ model.name }}CreateUpdateForm, self).__init__(*args, **kwargs)
+
+        {% for field in model.string_field_names %}
+        self.text_config('{{field}}'){% endfor %}
+        {% for field in model.integer_field_names %}
+        self.integer_config('{{field}}'){% endfor %}
+        {% for field in model.foreign_field_names %}
+        self.fields['{{field}}'].widget.attrs['class'] = 'form-control'{% endfor %}
+
+    def save(self):
+        """
+        Salva / Actualiza el process step
+        :return:
+        """
+        entity = super({{ model.name }}CreateUpdateForm, self).save(commit=False)
+        entity.save(request=self.request)
+
+        return entity{% endfor %}

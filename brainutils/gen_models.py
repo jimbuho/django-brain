@@ -28,11 +28,15 @@ CHAR_FIELDS = (CharField,)
 FOREIGN_FIELDS = (ForeignKey,)
 #: All fields that store text.
 STRING_FIELDS = (CharField, TextField)
+# Integer Fields
+INTEGER_FIELDS = (IntegerField,)
 #: All the fields used to filter.
 FILTER_FIELDS = (CharField, IntegerField, DateField, AutoField, BooleanField)
 
 NOT_FILTERABLE_FIELDS = ['creation_user','modification_user']
 AUDITABLE_FIELDS = ['status','creation_date', 'modification_date'] + NOT_FILTERABLE_FIELDS
+NO_INPUT_FIELDS = AUDITABLE_FIELDS + ['id','code']
+
 LAST_FIELD = 'status'
 
 def get_field_names(fields):
@@ -67,6 +71,17 @@ def is_searchable_field(field):
     :return:
     """
     response = isinstance(field, FILTER_FIELDS) and field.name not in AUDITABLE_FIELDS
+    return response
+
+def is_inputable_field(field):
+    """
+
+    Check if field is not inputable field
+
+    :param field:
+    :return:
+    """
+    response = isinstance(field, FILTER_FIELDS) and field.name not in NO_INPUT_FIELDS
     return response
 
 def order_auditable_fields_at_end(field):
@@ -122,6 +137,12 @@ class Model:
                                       self.model._meta.concrete_fields))
 
     @property
+    def integer_field_names(self):
+        """A list of concrete field names of type string (see :const:`INTEGER_FIELDS`)."""
+        return get_field_names(filter(lambda x: isinstance(x, INTEGER_FIELDS),
+                                      self.model._meta.concrete_fields))
+
+    @property
     def foreign_field_names(self):
         """A list of concrete field names of type foreign key (see :const:`FOREIGN_FIELDS`)."""
         return get_field_names(filter(lambda x: isinstance(x, FOREIGN_FIELDS),
@@ -143,6 +164,11 @@ class Model:
     def filter_field_names(self):
         """A list of concrete field names used for filters (see :const:`FILTER_FIELDS`)."""
         return get_field_names(filter(lambda x: is_filterable_field(x),
+                                      self.model._meta.concrete_fields))
+
+    @property
+    def input_fields(self):
+        return get_field_names(filter(lambda x: is_inputable_field(x),
                                       self.model._meta.concrete_fields))
 
     @property

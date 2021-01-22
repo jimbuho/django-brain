@@ -12,6 +12,8 @@ from django.contrib import admin, messages
 
 from import_export.admin import ImportExportModelAdmin
 
+from django.utils.safestring import mark_safe
+
 from . import messages as __
 
 class AdminMixinBase:
@@ -151,10 +153,9 @@ class AdminMixinBase:
             links.append(link)
 
 
-        return ' | '.join(links)
+        return mark_safe(' | '.join(links))
 
     # Configura el link para mostrarse en la columna
-    extra_actions.allow_tags = True
     extra_actions.short_description = 'Actions'
 
     def change_boolean_value_view(self, request, id, field_name):

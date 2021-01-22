@@ -1,0 +1,76 @@
+<!-- IMPORTANT: Replace () with {} in django templates code -->
+(% extends 'base.html' %)
+(% load i18n %)
+(% load butils %)
+
+(% block title %)List of {{ model.name|lower }}(% endblock %)
+
+(% block body %)
+<section id="{{ model.name|lower }}" class="{{ model.name|lower }}">
+    <main class="container">
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <a href="/{{app.name}}/create_{{ model.name|lower }}" class="btn btn-primary">(% display_message request 'add.new' %)</a>
+            </div>
+        </div>
+        <div class="row">
+        <div class="col-md-12">
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <nav class="col-md-3 d-md-block sidebar-filter p-top-20">
+            <h5>Search&Filters</h5>
+        </nav>
+    </div>
+    <main role="main" class="col-md-9 ml-sm-auto px-4">
+        <div class="row">
+            (% for p in page_obj %)
+            <div class="col-lg-4  col-md-4 d-flex align-items-stretch" data-aos="fade-up">
+                <article class="entry">
+                  <div class="entry-meta">
+                    <ul>
+                        {% for field in model.input_fields %}
+                        <li class="d-flex align-items-center">((p.{{field}}))</li>
+                        {% endfor %}
+                    </ul>
+                  </div>
+                  <div class="entry-content">
+                    <div class="read-more">
+                      <a href="/{{app.name}}/delete-{{model.name|lower}}/((p.id))">(% display_message request 'remove' %)</a>
+                      <a href="/{{app.name}}/edit-{{model.name|lower}}/((p.id))">(% display_message request 'edit' %)</a>
+                    </div>
+                  </div>
+                </article>
+            </div>
+            (% endfor %)
+        </div>
+        <div class="row">
+            <div class="blog-pagination" data-aos="fade-up">
+                <ul class="pagination justify-content-center">
+                    (% if page_obj.has_previous %)
+                    <li class="page-item">
+                        <a href="?page=1">&laquo; (% display_message request 'pag.first' %)</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page=(( page_obj.previous_page_number ))">(% display_message request 'pag.previus' %)</a>
+                    </li>
+                    (% endif %)
+                    <li class="page-item active">
+                        <a class="page-link" href="#">(( page_obj.number )) / (( page_obj.paginator.num_pages ))</a>
+                    </li>
+                    (% if page_obj.has_next %)
+                    <li class="page-item">
+                        <a href="?page=(( page_obj.next_page_number ))">(% display_message request 'pag.next' %)</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page=(( page_obj.paginator.num_pages ))">(% display_message request 'pag.last' %) &raquo;</a>
+                    </li>
+                    (% endif %)
+                </ul>
+            </div>
+        </div>
+    </main>
+</section>
+(% endblock %)
+

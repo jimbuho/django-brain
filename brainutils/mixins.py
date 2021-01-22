@@ -107,24 +107,20 @@ class AuditMixin(models.Model):
         :param kwargs:
         :return:
         """
-        user = self.username
+        request = kwargs.pop('request', None)
+        user = request.user if request else None
 
-        if not self.pk:
+        if not self.status:
             self.status = self.ACTIVE
 
-        if not self.pk:
-
-            if not self.creation_user and user:
-                if isinstance(user, User): user = user.username
-                if user: self.creation_user = user[:64]
+        if not self.creation_user and user:
+            self.creation_user = user.username[:64] if user else None
 
         if not self.creation_date:
             self.creation_date = timezone.now()
 
         self.modification_date = timezone.now()
-        if user:
-            if isinstance(user, User): user = user.username
-            self.modification_user = user[:64]
+        self.modification_user = user.username[:64] if user else None
 
         obj = super(AuditMixin, self).save(*args, **kwargs)
         return obj

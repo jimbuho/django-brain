@@ -29,8 +29,9 @@ class ConsoleCommand:
         print('BRAIN UTILS GENERATOR')
         print('What we gonna do?:')
         print('1. Generate Admins')
-        print('2. Generate URLs- Views')
+        print('2. Generate CRUD URL-Views-Forms')
         print('3. Generate Signup - Login')
+        print('4. Generate CRUD HML (Beta)')
         print('0. Exit')
         print('***************************')
 
@@ -67,6 +68,9 @@ class ConsoleCommand:
                 elif option == '3':
                     self.option_3()
                     self.menu()
+                elif option == '4':
+                    self.option_4()
+                    self.menu()
                 else:
                     print('Invalid Option:', option)
         except Exception as e:
@@ -86,10 +90,28 @@ class ConsoleCommand:
             traceback.print_exc()
 
     def option_2(self):
-        print('In Work...')
+        try:
+            app_name = str(input('Input the app name (empty if you need for all):'))
+
+            if not app_name or app_name == '':
+                self.generator.run('crud')
+            else:
+                self.generator.run('crud', app_name)
+        except Exception as e:
+            print('Error al procesar opcion 2:', str(e))
+            traceback.print_exc()
 
     def option_3(self):
         print('In Work...')
+
+    def option_4(self):
+        try:
+            app_name = str(input('Input the app name:'))
+            if app_name:
+                self.generator.run('crud_html', app_name)
+        except Exception as e:
+            print('Error al procesar opcion 2:', str(e))
+            traceback.print_exc()
 
 class Command(BaseCommand):
     """

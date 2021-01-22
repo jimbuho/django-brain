@@ -1,0 +1,20 @@
+"""
+
+Module {{app.name}} URLs Documentation
+
+"""
+{% load bgen %}from django.conf.urls import url, include
+
+from . import views
+
+urlpatterns = [
+{% for model in models %}
+    url(r'^{{model.name|lower}}-list/$', views.{{model.name}}ListView.as_view(), name='{{model.name|lower}}_list'),
+
+    url(r'^create-{{model.name|lower}}/$', views.{{model.name}}CreateView.as_view(), name='create_{{model.name|lower}}'),
+
+    url(r'^update-{{model.name|lower}}/(?P<pk>\d+)/$', views.{{model.name}}UpdateView.as_view(), name='update_{{model.name|lower}}'),
+
+    url(r'^delete-{{model.name|lower}}/(?P<pk>\d+)/$', views.{{model.name}}DeleteView.as_view(), name='delete_{{model.name|lower}}'),
+{% endfor %}
+]

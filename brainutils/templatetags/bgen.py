@@ -30,7 +30,6 @@ def format_indent_line(items, spaces, indent, backslash, is_last):
         line += ' \\'
     return line
 
-
 @register.simple_tag
 def indent_items(items, spaces, backslash=False, quote=False):
     """Prints elements of a list separated by commas. If the line length exceeds :const:`MAX_LENGTH` it
@@ -62,14 +61,12 @@ def indent_items(items, spaces, backslash=False, quote=False):
             lines.append(format_indent_line(line_items, spaces, lines, backslash, is_last))
     return mark_safe('\n'.join(lines))
 
-
 @register.simple_tag
 def from_module_import(module, items):
     """Print "from <module> import <items>". Elements are separated by commas (``,``). If the line length
     exceeds :const:`MAX_LENGTH` it breaks to another line.
     """
     return mark_safe('from {} import {}'.format(module, indent_items(items, 4, True)))
-
 
 @register.filter(is_safe=True)
 def add_to_items(items, suffix):
@@ -82,14 +79,12 @@ def add_to_items(items, suffix):
     """
     return ['{}{}'.format(x, suffix) for x in items]
 
-
 @register.filter(is_safe=True)
 def prefix_to_items(items, prefix):
     """Add a prefix to the elements of a listing. For example, add "Base" to
     each item in the list.
     """
     return ['{}{}'.format(prefix, x) for x in items]
-
 
 @register.filter(is_safe=True)
 def suffix_to_items(items, suffix):

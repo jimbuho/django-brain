@@ -1,0 +1,230 @@
+"""
+
+Module {{app.name}} Views Documentation
+
+"""
+{% load bgen %}from django.http import HttpResponseRedirect, Http404
+from django.views.generic import UpdateView, CreateView, ListView, DeleteView
+from django.urls import reverse
+from braces.views import UserPassesTestMixin
+from brainutils import messages
+from django.contrib import messages as django_messages
+
+from . import models, forms
+
+{% for model in models %}
+class {{ model.name }}ListView(UserPassesTestMixin, ListView):
+    """
+
+    {{ model.name }} List View
+
+    :desciption Listado y filtro de elementos
+
+    """
+    context_object_name = 'list_{{ model.name|lower }}'
+    paginate_by = 10
+    template_name = '{{app.name}}/{{ model.name|lower }}_list.html'
+
+    def test_func(self, user):
+        """Revision de permisos de acceso a esta vista"""
+        if not user.is_authenticated:
+            self.login_url = reverse('account_login')
+            return False
+        # Aqui otras condiciones
+        return True
+
+    def get_queryset(self):
+        """ Filtro del listado  """
+        queryset = models.{{ model.name }}.objects.get_active()
+        {% for field in model.foreign_field_names %}
+        try:
+            {{field}}_id = int(self.request.GET['{{field}}']) if '{{field}}' in self.request.GET else None
+            if {{field}}_id:
+                queryset = queryset.filter({{field}}__id={{field}}_id)
+        except:
+            pass
+        {% endfor %}
+        return queryset.order_by('-creation_date')
+
+class {{ model.name }}CreateView(UserPassesTestMixin, CreateView):
+    """
+
+    {{ model.name }} Create View
+
+    :desciption Creacion de elementos nuevos de tipo {{ model.name }}
+
+    """
+    template_name = '{{app.name}}/create_{{ model.name|lower }}.html'
+    form_class = forms.{{ model.name }}CreateUpdateForm
+
+    def test_func(self, user):
+        """Revision de permisos de acceso a esta vista"""
+        if not user.is_authenticated:
+            self.login_url = reverse('account_login')
+            return False
+
+        # Aqui otras condiciones
+        return True
+
+    def form_valid(self, form, **kwargs):
+        """
+        Form Valid
+        :desciption This method is called when valid form data has been POSTed. It should return an HttpResponse.
+        :param form:
+        :return: HttpResponse
+        """
+        obj = form.save()
+        if obj:
+            django_messages.success(self.request, messages.get_full_message(self.request, '{{ model.name|lower }}.create.success'))
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form, **kwargs):
+        """
+        Form Invalid
+        :param form:
+        :param kwargs:
+        :return:
+        """
+        context = self.get_context_data(**kwargs)
+        # Do whatever here with form error
+        return self.render_to_response(context)
+
+    def get_form_kwargs(self):
+        """
+        Get Form Kwargs
+        :desciption Sobrescribimos para pasar el parametro request al formulario {{ model.name }}CreateUpdateForm
+        :return:
+        """
+        kwargs = super({{ model.name }}CreateView, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
+
+    def get_success_url(self):
+        """
+        Get Success URL
+        :desciption Configura la URL de exito al procesar esta vista
+        """
+        return reverse('{{ model.name|lower }}_list')
+
+    def get_fail_url(self):
+        """
+        Get Fail URL
+        :desciption Configura la URL de fallo en base a los parametros recuperados en el formulario de esta vista.
+        """
+        return reverse('create_{{ model.name|lower }}')
+
+class {{ model.name }}UpdateView(UserPassesTestMixin, UpdateView):
+    """
+
+    {{ model.name }} Update View
+
+    :desciption Vista de actualizacion de registros de tipo {{ model.name }}
+
+    """
+    template_name = '{{app.name}}/update_{{ model.name|lower }}.html'
+    model = models.{{model.name}}
+    form_class = forms.{{model.name}}CreateUpdateForm
+
+    def test_func(self, user):
+        """Revision de permisos de acceso a esta vista"""
+        if not user.is_authenticated:
+            self.login_url = reverse('account_login')
+            return False
+
+        # Aqui otras condiciones
+        return True
+
+    def form_valid(self, form, **kwargs):
+        """
+        Form Valid
+        :desciption This method is called when valid form data has been POSTed. It should return an HttpResponse.
+        :param form:
+        :return: HttpResponse
+        """
+        obj = form.save()
+        if obj:
+            django_messages.success(self.request, messages.get_full_message(self.request, '{{ model.name|lower }}.update.success'))
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form, **kwargs):
+        """
+        Form Invalid
+        :param form:
+        :param kwargs:
+        :return:
+        """
+        context = self.get_context_data(**kwargs)
+        # Do whatever here with form error
+        return self.render_to_response(context)
+
+    def get_form_kwargs(self):
+        """
+        Get Form Kwargs
+        :desciption Sobrescribimos para pasar el parametro request al formulario {{ model.name }}CreateUpdateForm
+        :return:
+        """
+        kwargs = super({{ model.name }}UpdateView, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
+
+    def get_success_url(self):
+        """
+        Get Success URL
+        :desciption Configura la URL de exito al procesar esta vista
+        """
+        return reverse('{{ model.name|lower }}_list')
+
+    def get_fail_url(self):
+        """
+        Get Fail URL
+        :desciption Configura la URL de fallo en base a los parametros recuperados en el formulario de esta vista.
+        """
+        return reverse('update_{{ model.name|lower }}')
+
+class {{ model.name }}DeleteView(UserPassesTestMixin, DeleteView):
+    """
+
+    {{ model.name }} Delete View
+
+    :desciption Vista de eliminacion de registros de tipo {{ model.name }}
+
+    """
+    template_name = '{{app.name}}/{{ model.name|lower }}_delete_confirm.html'
+    model = models.{{ model.name }}
+
+    def test_func(self, user):
+        """Revision de permisos de acceso a esta vista"""
+        if not user.is_authenticated:
+            self.login_url = reverse('account_login')
+            return False
+
+        # Aqui otras condiciones
+        return True
+    
+    def delete(self, request, *args, **kwargs):
+        """
+        Logic delete object
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.get_object().disable()
+        django_messages.success(self.request, messages.get_full_message(self.request, '{{ model.name|lower }}.delete.success'))
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        """
+        Get Success URL
+        :desciption Configura la URL de exito al procesar esta vista
+        """
+        return reverse('{{ model.name|lower }}_list')
+
+    def get_fail_url(self):
+        """
+        Get Fail URL
+        :desciption Configura la URL de fallo en base a los parametros recuperados en el formulario de esta vista.
+        """
+        return reverse('{{ model.name|lower }}_list'){% endfor %}
