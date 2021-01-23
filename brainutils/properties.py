@@ -35,4 +35,5 @@ Description
 
 """
 
-DATE_INPUT_FORMATS = ['%m/%d/%Y',]
+DATE_INPUT_FORMATS = ['%m/%d/%Y','%m/%d/%y','%Y-%m-%d']
+DATETIME_INPUT_FORMATS = ['%m/%d/%Y %H:%M','%m/%d/%y %H:%M','%Y-%m-%d %H:%M']

@@ -90,6 +90,27 @@ class CommonForm:
 
         self.attrs_apply(name, onchange, rule, msg)
 
+    def datetime_config(self, name, input_formats=P.DATETIME_INPUT_FORMATS, rule=None, msg=None, required=True, onchange=None):
+        """
+
+        Date Config
+
+        Description
+            Configuracion de fechas
+
+        :param name:
+        :return:
+        """
+        self.fields[name] = forms.DateField(input_formats=input_formats, widget=forms.DateInput(
+            attrs={
+                'class': 'date form-control datepicker',
+                'data-placement': 'left',
+                'type':'datetime-local'
+            }
+        ), required=required)
+
+        self.attrs_apply(name, onchange, rule, msg)
+
     def date_config(self, name, input_formats=P.DATE_INPUT_FORMATS, rule=None, msg=None, required=True, onchange=None):
         """
 
@@ -105,9 +126,9 @@ class CommonForm:
             attrs={
                 'class': 'date form-control datepicker',
                 'data-placement': 'left',
-                'autocomplete': 'off',
-                'placeholder': messages.get_full_message(self.request, 'forms.field.placeholder.%s' % name)
-            }
+                'type':'date'
+            },
+            format=('%m-%d-%Y')
         ), required=required)
 
         self.attrs_apply(name, onchange, rule, msg)

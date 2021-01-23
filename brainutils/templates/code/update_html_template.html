@@ -16,7 +16,7 @@
                 <div class="form-row">
                     <div class="col-md-12 form-group">
                         <label>(% display_message request 'form.{{field}}' %):</label>&nbsp;((form.{{field}}))
-                        <div class="validate"></div>
+                        <div class="validate">((form.{{field}}.errors))</div>
                     </div>
                 </div>{% endfor %}
                 <!-- TODO Print extras fields-->
