@@ -177,7 +177,7 @@ class MessageManager:
         else:
             self.is_default = True
 
-    def get_message(self, name):
+    def get_message(self, name, default=None):
         """
 
         Get Message
@@ -211,23 +211,23 @@ class MessageManager:
                     messages = models.Message.objects.get_active(name = name, published=True)
                 else:
                     messages = models.MessageTraduction.objects.get_active(message__name = name,
-                                                                           language__name = self.language,
-                                                                           published = True)
+                                                                           language__name = self.language)
 
                 if messages.count() > 0:
                     message = messages.first().text
                     messages_dict['%s.%s' % (language_name, name)] = message
                     get_message.messages = messages_dict
                 else:
-                    self.create_default(name, self.language)
-            except:
+                    self.create_default(name, self.language, default)
+            except Exception as e:
+                print('[brainutils-messages] Error al obtener el mensaje: %s' % str(e))
                 message = None
 
         if message == self.DEFAULT_MSG:
             return name
         return message
 
-    def create_default(self, name, language):
+    def create_default(self, name, language, default=None):
         """
 
         Create Default
@@ -243,20 +243,20 @@ class MessageManager:
                 return
             else:
                 if self.is_default:
-                    models.Message.objects.create(name=name, text=name) #self.DEFAULT_MSG
+                    models.Message.objects.create(name=name, text=default if default else name) #self.DEFAULT_MSG
                 else:
                     try:
                         message = models.Message.objects.get(name = name)
                     except models.Message.DoesNotExist:
-                        message = models.Message.objects.create(name=name, text=name)
+                        message = models.Message.objects.create(name=name, text=default if default else name)
 
-                    models.MessageTraduction.objects.create(message=message, text=name,
+                    models.MessageTraduction.objects.create(message=message, text=default if default else name,
                                                             language=languages.get_by_name(language))
         except Exception as e:
             import traceback
             traceback.print_exc()
 
-def get_message(name, language=None):
+def get_message(name, language=None, default=None):
     """
 
     Get Message
@@ -268,9 +268,9 @@ def get_message(name, language=None):
     :param language: El lenguaje del mensaje
     :return: String -- El texto del mensaje
     """
-    return MessageManager(language).get_message(name)
+    return MessageManager(language).get_message(name, default=default)
 
-def get_full_message(request, name):
+def get_full_message(request, name, default=None):
     """
 
     Get Message Complete
@@ -282,8 +282,7 @@ def get_full_message(request, name):
     :param name: El nombre unico del mensaje
     :return: String -- El texto del mensaje
     """
-    return MessageManager(languages.get_language(request)).get_message(name)
-
+    return MessageManager(languages.get_language(request)).get_message(name, default=default)
 
 def format_message(message, *args):
     """
@@ -291,7 +290,7 @@ def format_message(message, *args):
     Format message
 
     Description
-        Tranforma de ser prosible un mensaje con sus respectivos valores
+        Agrega variables a un mensaje
     
     :param message:
     :param *args: Lista de valores a reempazarse en el mensaje

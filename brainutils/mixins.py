@@ -120,7 +120,8 @@ class AuditMixin(models.Model):
             self.creation_date = timezone.now()
 
         self.modification_date = timezone.now()
-        self.modification_user = user.username[:64] if user else None
+
+        self.modification_user = user.username[:64] if user else self.modification_user
 
         obj = super(AuditMixin, self).save(*args, **kwargs)
         return obj

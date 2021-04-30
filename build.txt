@@ -6,10 +6,14 @@ Install in dev app:
 
 pip install /home/developer/projects/django/django-brain-utils/dist/django_brain_utils*.tar.gz
 
-Install in PIP Test:
+Install from test pip:
 
-python3 -m twine upload --repository testpypi --skip-existing dist/*
+pip install --index-url https://test.pypi.org/simple/ django-brain-utils
 
-Install in PIP:
+UPLOAD in PIP Test:
 
-python3 -m twine upload --repository dist/*
+python3.8 -m twine upload --repository testpypi --skip-existing dist/*
+
+UPLOAD in PIP:
+
+python3.8 -m twine upload --repository dist/*
