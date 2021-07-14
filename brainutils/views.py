@@ -4,6 +4,8 @@ from django.views.generic.base import View
 
 from brainutils import messages
 
+from . import signals
+
 class LanguageChangeView(View):
     """
 
@@ -28,6 +30,9 @@ class LanguageChangeView(View):
         :return:
         """
         if 'name' in request.GET:
-            messages.languages.change_language(request, request.GET.get('name'))
+            resp, lang = messages.languages.change_language(request, request.GET.get('name'))
+            
+            if resp:
+                signals.language_changed.send(sender=self.__class__, user=request.user, language=lang)
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

@@ -19,6 +19,7 @@ brainutils/mixforms.py
 brainutils/mixins.py
 brainutils/models.py
 brainutils/properties.py
+brainutils/signals.py
 brainutils/telegrambot.py
 brainutils/urls.py
 brainutils/validators.py

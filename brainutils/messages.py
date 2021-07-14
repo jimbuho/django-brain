@@ -124,10 +124,11 @@ class LanguageManager:
         languages = models.Language.objects.get_active(name = name)
 
         if languages.count() > 0:
-            memory.cache.store(memory.Memory.MAIN, 'dbu.languages.current', languages.first().name, request)
-            return True
+            first = languages.first()
+            memory.cache.store(memory.Memory.MAIN, 'dbu.languages.current', first.name, request)
+            return True, first
 
-        return False
+        return False, None
 
     def create_language(self, name):
         """
