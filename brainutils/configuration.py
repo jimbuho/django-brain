@@ -84,7 +84,6 @@ class ConfigurationManager:
 
             return value
         except Exception as e:
-            logger.info('<- [Configuration.get_value] Error: %s' % str(e))
             return ''
 
     def create_default(self, name, description, default):
